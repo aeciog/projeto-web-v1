@@ -1,8 +1,10 @@
 package com.aetiosdigital.projetowebv1.config;
 
+import com.aetiosdigital.projetowebv1.entities.Category;
 import com.aetiosdigital.projetowebv1.entities.Order;
 import com.aetiosdigital.projetowebv1.entities.User;
 import com.aetiosdigital.projetowebv1.entities.enums.OrderStatus;
+import com.aetiosdigital.projetowebv1.repositories.CategoryRepository;
 import com.aetiosdigital.projetowebv1.repositories.OrderRepository;
 import com.aetiosdigital.projetowebv1.repositories.UserRepository;
 
@@ -22,8 +24,17 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public void run(String... args) throws Exception {
+        Category cat1 = new Category(null, "Electronics");
+        Category cat2 = new Category(null, "Books");
+        Category cat3 = new Category(null, "Computers");
+
+        categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+
         User u1 = new User(null, "user 1", "user1@gmail.com", "988888888", "123456");
         User u2 = new User(null, "user 2", "user2@gmail.com", "977777777", "123456");
 
