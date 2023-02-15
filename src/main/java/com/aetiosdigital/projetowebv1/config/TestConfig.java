@@ -1,14 +1,8 @@
 package com.aetiosdigital.projetowebv1.config;
 
-import com.aetiosdigital.projetowebv1.entities.Category;
-import com.aetiosdigital.projetowebv1.entities.Order;
-import com.aetiosdigital.projetowebv1.entities.Product;
-import com.aetiosdigital.projetowebv1.entities.User;
+import com.aetiosdigital.projetowebv1.entities.*;
 import com.aetiosdigital.projetowebv1.entities.enums.OrderStatus;
-import com.aetiosdigital.projetowebv1.repositories.CategoryRepository;
-import com.aetiosdigital.projetowebv1.repositories.OrderRepository;
-import com.aetiosdigital.projetowebv1.repositories.ProductRepository;
-import com.aetiosdigital.projetowebv1.repositories.UserRepository;
+import com.aetiosdigital.projetowebv1.repositories.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,6 +25,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -55,17 +52,27 @@ public class TestConfig implements CommandLineRunner {
 
         productRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 
-
         User u1 = new User(null, "user 1", "user1@gmail.com", "988888888", "123456");
         User u2 = new User(null, "user 2", "user2@gmail.com", "977777777", "123456");
 
-        Order o1 = new Order(null, Instant.parse("2023-02-10T13:30:07Z"), OrderStatus.DELIVERED,u1);
+        Order o1 = new Order(null, Instant.parse("2023-02-10T13:30:07Z"), OrderStatus.PAID,u1);
         Order o2 = new Order(null, Instant.parse("2023-02-11T14:30:10Z"),OrderStatus.CANCELED, u2);
         Order o3 = new Order(null, Instant.parse("2023-02-12T15:30:22Z"),OrderStatus.WAITING_PAYMENT, u1);
 
         userRepository.saveAll(Arrays.asList(u1,u2));
         orderRepository.saveAll(Arrays.asList(o1,o2,o3));
 
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
 
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
+
+        Payment pay1 = new Payment(null, Instant.parse("2023-02-10T14:20:19Z"), o1);
+        o1.setPayment(pay1); //
+
+        orderRepository.save(o1);
     }
 }
