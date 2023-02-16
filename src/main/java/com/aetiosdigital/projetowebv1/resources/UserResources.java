@@ -40,4 +40,10 @@ public class UserResources {
         return ResponseEntity.created(uri).body(obj); // Cabeçalho contendo location
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
